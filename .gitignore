@@ -1,0 +1,29 @@
+# 凭证 / 密钥（绝不能 commit）
+.env
+.env.local
+*.key
+*.pem
+credentials.json
+
+# 研究员产出（按需保留）
+output/
+!output/.gitkeep
+
+# Claude Code 运行时缓存
+.claude/cache/
+.claude/logs/
+.claude/.session/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

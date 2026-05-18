@@ -1,0 +1,69 @@
+name: cn-company-snapshot
+version: 0.1.0
+model: claude-sonnet-4-6
+system:
+  text: |
+    你为一家 A 股 / 港股公司生成标准化"公司画像"。
+    数据来自受信 MCP，**不读 UNTRUSTED 文档**。
+    规则：
+    - 只填 schema 字段，不输出自由文本
+    - 缺失字段标 null，不要推算 / 编造
+    - 业务分部如未披露 → segments: []
+
+tools:
+  - type: agent_toolset_20260401
+    default_config: { enabled: false }
+    configs:
+      - { name: mcp, enabled: true }
+
+mcp_servers:
+  - name: wind
+  - name: factset
+
+output_schema:
+  type: object
+  required: [ticker, name, financial_snapshot, segments, peer_comparison]
+  additionalProperties: false
+  properties:
+    ticker:
+      type: string
+      pattern: "^[0-9A-Z.]+$"
+    name:
+      type: string
+      maxLength: 50
+    financial_snapshot:
+      type: object
+      required: [revenue_ttm, gross_margin, roe, net_income_growth_yoy]
+      additionalProperties: false
+      properties:
+        revenue_ttm: { type: ["number", "null"] }
+        gross_margin: { type: ["number", "null"] }
+        roe: { type: ["number", "null"] }
+        net_income_growth_yoy: { type: ["number", "null"] }
+        pe_ttm: { type: ["number", "null"] }
+        pb_mrq: { type: ["number", "null"] }
+    segments:
+      type: array
+      maxItems: 8
+      items:
+        type: object
+        required: [segment_name, revenue_share_pct]
+        additionalProperties: false
+        properties:
+          segment_name:
+            type: string
+            maxLength: 50
+          revenue_share_pct: { type: number }
+          gross_margin: { type: ["number", "null"] }
+    peer_comparison:
+      type: object
+      additionalProperties: false
+      properties:
+        peer_tickers:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+        relative_position:
+          type: string
+          enum: [leader, top_tier, middle, lagging]

@@ -1,0 +1,48 @@
+name: bull-case-agent
+version: 0.1.0
+model: claude-opus-4-7
+system:
+  text: |
+    你扮演该标的最坚定的多头研究员。
+    任务：基于 base case，构建最强的看多论据（≤ 5 条）。
+    规则：
+    - 论据必须 grounded 在 base case + context 文档，**不允许外推**
+    - 每条论据必须配一个 attack_surface（自暴薄弱点 / 攻击面）
+    - **不要输出"建议 / 买入 / 推荐"**（schema 不含此字段）
+    - 攻击空头视角是后续 bear-case-agent 的事，你不要主动反驳
+
+tools:
+  - type: agent_toolset_20260401
+    default_config: { enabled: false }
+    configs:
+      - { name: read, enabled: true }
+      - { name: grep, enabled: true }
+
+mcp_servers: []
+
+output_schema:
+  type: object
+  required: [bull_arguments]
+  additionalProperties: false
+  properties:
+    bull_arguments:
+      type: array
+      minItems: 3
+      maxItems: 5
+      items:
+        type: object
+        required: [argument, evidence_anchor, attack_surface]
+        additionalProperties: false
+        properties:
+          argument:
+            type: string
+            maxLength: 200
+          evidence_anchor:
+            type: string
+            maxLength: 200
+          attack_surface:
+            type: string
+            maxLength: 200
+          strength:
+            type: string
+            enum: [core, supporting, edge_case]

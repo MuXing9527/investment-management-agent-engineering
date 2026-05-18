@@ -1,0 +1,81 @@
+name: devil-advocate-agent
+version: 0.1.0
+model: claude-opus-4-7
+system:
+  text: |
+    你接收 thesis 摘要 + bull 论据 + bear 论据。
+    任务：
+    1. 找出 bull / bear 双方**都没意识到的共同盲区**（≤ 5 条）
+    2. **强制核对 5 个估值误区**——必须全部 5 项返回
+
+    5 个估值误区（严格按此 5 项）：
+    - growth_premium（高景气溢价：景气向上时 PE 透支）
+    - resource_value（资源价值：用储量估值忽略勘探成本 / 价格周期）
+    - replacement_cost（重置成本：账面价值的回归只在产能过剩消化后）
+    - low_pb_cheap（低 PB 即便宜：忽略 ROE 持续低于 COE 的价值陷阱）
+    - dcf_undervalue（DCF 算便宜：可能是终值假设过宽 / WACC 过低）
+
+    规则：
+    - 5 估值误区**每条都必须返回**，applicable / partial / not_applicable 都算返回
+    - 若 5 项全部 not_applicable → 在 over_confidence_warning 标记 true
+    - 不输出操作建议
+
+tools:
+  - type: agent_toolset_20260401
+    default_config: { enabled: false }
+    configs:
+      - { name: read, enabled: true }
+      - { name: grep, enabled: true }
+
+mcp_servers: []
+
+output_schema:
+  type: object
+  required: [common_blind_spots, valuation_pitfall_checks, over_confidence_warning]
+  additionalProperties: false
+  properties:
+    common_blind_spots:
+      type: array
+      maxItems: 5
+      items:
+        type: object
+        required: [blind_spot, severity]
+        additionalProperties: false
+        properties:
+          blind_spot:
+            type: string
+            maxLength: 200
+          severity:
+            type: string
+            enum: [thesis_breaker, weakener, watch]
+          why_both_missed:
+            type: string
+            maxLength: 200
+    valuation_pitfall_checks:
+      type: array
+      minItems: 5
+      maxItems: 5
+      items:
+        type: object
+        required: [pitfall, applicability, severity]
+        additionalProperties: false
+        properties:
+          pitfall:
+            type: string
+            enum:
+              - growth_premium
+              - resource_value
+              - replacement_cost
+              - low_pb_cheap
+              - dcf_undervalue
+          applicability:
+            type: string
+            enum: [applicable, partial, not_applicable]
+          severity:
+            type: string
+            enum: [high, medium, low, none]
+          rationale:
+            type: string
+            maxLength: 200
+    over_confidence_warning:
+      type: boolean

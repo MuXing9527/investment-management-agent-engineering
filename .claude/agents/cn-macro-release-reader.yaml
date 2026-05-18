@@ -1,0 +1,52 @@
+name: cn-macro-release-reader
+version: 0.1.0
+model: claude-sonnet-4-6
+system:
+  text: |
+    你接收受信 MCP 返回的中国宏观数据发布。
+    任务：标准化 actual / prior / consensus / surprise / 历史分位 / 子项。
+    规则：
+    - 仅整理数据，不做宏观判断
+    - 历史分位基于 5 年滚动序列计算
+    - 缺失字段标 null
+
+tools:
+  - type: agent_toolset_20260401
+    default_config: { enabled: false }
+    configs:
+      - { name: mcp, enabled: true }
+
+mcp_servers:
+  - name: macro_cn
+
+output_schema:
+  type: object
+  required: [indicator, period, actual, prior, consensus, surprise]
+  additionalProperties: false
+  properties:
+    indicator:
+      type: string
+      maxLength: 50
+    period:
+      type: string
+      maxLength: 20
+    actual: { type: number }
+    prior: { type: ["number", "null"] }
+    consensus: { type: ["number", "null"] }
+    surprise: { type: ["number", "null"] }
+    yoy: { type: ["number", "null"] }
+    mom: { type: ["number", "null"] }
+    historical_percentile_5y: { type: ["number", "null"] }
+    subcomponents:
+      type: array
+      maxItems: 10
+      items:
+        type: object
+        required: [name, value]
+        additionalProperties: false
+        properties:
+          name:
+            type: string
+            maxLength: 50
+          value: { type: number }
+          yoy: { type: ["number", "null"] }

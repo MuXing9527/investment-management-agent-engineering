@@ -1,0 +1,68 @@
+name: industry-aggregator
+version: 0.1.0
+model: claude-sonnet-4-6
+system:
+  text: |
+    你接收 N 份 cn-company-snapshot 输出，做行业级聚合统计。
+    规则：
+    - 仅做计算 / 排序 / 分位，不做行业判断（判断由 L3 Skill 完成）
+    - 输入数据 null 字段 → 排除该公司，不要 impute
+    - 不调外部数据源
+
+tools:
+  - type: agent_toolset_20260401
+    default_config: { enabled: false }
+    configs: []
+
+mcp_servers: []
+
+output_schema:
+  type: object
+  required: [n_companies, concentration, distribution]
+  additionalProperties: false
+  properties:
+    n_companies: { type: integer }
+    concentration:
+      type: object
+      required: [cr5, cr10]
+      additionalProperties: false
+      properties:
+        cr5: { type: number }
+        cr10: { type: number }
+        hhi: { type: ["number", "null"] }
+    distribution:
+      type: object
+      additionalProperties: false
+      properties:
+        gross_margin:
+          type: object
+          additionalProperties: false
+          properties:
+            p25: { type: number }
+            p50: { type: number }
+            p75: { type: number }
+        roe:
+          type: object
+          additionalProperties: false
+          properties:
+            p25: { type: number }
+            p50: { type: number }
+            p75: { type: number }
+        pe_ttm:
+          type: object
+          additionalProperties: false
+          properties:
+            p25: { type: number }
+            p50: { type: number }
+            p75: { type: number }
+    leaders_by_revenue:
+      type: array
+      maxItems: 10
+      items:
+        type: object
+        required: [ticker, revenue_ttm, share_pct]
+        additionalProperties: false
+        properties:
+          ticker: { type: string }
+          revenue_ttm: { type: number }
+          share_pct: { type: number }
