@@ -1,5 +1,5 @@
 {
-  "_comment": "Hook 配置示意，对应 Ch26。timeout_ms 必须设上限。",
+  "_comment": "Hook 配置示意，对应 Ch35。timeout_ms 必须设上限。",
   "hooks": {
     "PreToolUse": [
       {

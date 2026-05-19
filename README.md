@@ -1,6 +1,6 @@
 # methodology-as-asset
 
-《方法论资产化：从 Prompt 到 Agent 的投研工程》配套结构骨架。
+《方法论资产化：买方机构投资管理的 Agent 工程》配套结构骨架。
 
 ## 这个 repo 是什么
 

@@ -1,5 +1,5 @@
 """
-Ch26 PreToolUse hook —— 写文件前的合规检查闸门。
+Ch35 PreToolUse hook —— 写文件前的合规检查闸门。
 
 非 0 退出 + decision=block 会阻止本次写入。
 本脚本是 demo 示意，生产环境使用前需要：

@@ -1,5 +1,5 @@
 """
-Ch26 Stop hook —— 会话级收尾检查。
+Ch35 Stop hook —— 会话级收尾检查。
 
 注意：用 decision=warn 而非 block——会话已走到收尾，强制 block 会让研究员工作丢失。
 """
