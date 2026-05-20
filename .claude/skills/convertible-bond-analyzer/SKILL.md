@@ -5,7 +5,7 @@ last_updated: 2026-05-20
 maintainer: <团队>
 description: 中国可转债个券分析、估值比较、条款跟踪与池子更新
 changelog:
-  - 0.1.0: 初始骨架（教程 Ch23 固收 Agent 组）
+  - 0.1.0: 初始骨架（教程 Ch25 可转债 Agent）
 ---
 
 # Skill: convertible-bond-analyzer

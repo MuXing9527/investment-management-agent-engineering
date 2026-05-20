@@ -1,6 +1,6 @@
 # 新研究员入职 Onboarding 流程
 
-> 本文档对应教程 Ch36 模式 A（Cowork）的 5-15 人团队部署形态。
+> 本文档对应教程 Ch38 模式 A（Cowork）的 5-15 人团队部署形态。
 
 ## Day 0 · IT 准备
 
@@ -23,7 +23,7 @@
 1. **earnings-note-cn**（Ch18 财报点评）—— 拿一份近期已公开财报跑通
 2. **research-digest-cn**（Ch19 研报消化）—— 拿一份近期卖方研报跑通
 3. **announcement-comment-cn**（Ch21 公告点评）—— 拿一份重要公告跑通
-4. **thesis-debate**（Ch25 投委会预演）—— 用 base case 文档跑通辩论
+4. **thesis-debate**（Ch27 投委会预演）—— 用 base case 文档跑通辩论
 
 跑通的标准：
 

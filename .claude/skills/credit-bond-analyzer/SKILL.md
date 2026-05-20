@@ -5,7 +5,7 @@ last_updated: 2026-05-20
 maintainer: <团队>
 description: 中国信用债主体/个券分析与信用利差复盘
 changelog:
-  - 0.1.0: 初始骨架（教程 Ch23 固收 Agent 组）
+  - 0.1.0: 初始骨架（教程 Ch24 信用债 Agent）
 ---
 
 # Skill: credit-bond-analyzer
